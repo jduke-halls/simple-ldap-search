@@ -41,6 +41,6 @@
     "rimraf": "3.0.2"
   },
   "dependencies": {
-    "ldapjs": "^2.3.1"
+    "ldapjs": "^2.3.3"
   }
 }
