@@ -52,7 +52,7 @@ const users = await ldap.search(filter, attributes);
 
 ### `ldap.search(filter, attributes)`
 
-Parameters
+#### Parameters
 
 - `filter`: filters results.
 - `attributes`: a list of attributes to return
@@ -66,7 +66,8 @@ Returns
 Destroys the connection to the LDAP server. Use when all done with LDAP client.
 
 ### `ldap.starttls(opts)`
-Parameters
+
+#### Parameters
 
 - `opts`: Object of TLS Options documented on [LDAPjs's Client API page](http://ldapjs.org/client.html#starttls)
 ```
