@@ -201,4 +201,15 @@ describe('simple-ldap-search index', () => {
     await expect(ldap.search('uid=artvandelay')).rejects.toThrow();
     ldap.destroy();
   });
+
+  it('clears queue when bind fails', async () => {
+    const ldap = new SimpleLDAP({ ...config, password: 'wrong' });
+    const p1 = ldap.bindDN();
+    const p2 = ldap.bindDN();
+    await expect(p1).rejects.toThrow();
+    await expect(p2).rejects.toThrow();
+    expect(ldap.isBinding).toBe(false);
+    expect(ldap.queue.length).toBe(0);
+    ldap.destroy();
+  });
 });
