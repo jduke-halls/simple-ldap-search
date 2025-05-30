@@ -30,6 +30,8 @@ export default class SimpleLDAPSearch {
       this.client = null;
     }
     this.isBoundTo = null;
+    this.isBinding = false;
+    this.queue = [];
   }
 
   bindDN() {
@@ -54,20 +56,27 @@ export default class SimpleLDAPSearch {
       }
 
       if (this.isBinding) {
-        // put this resolve function on the queue
-        // to be called when binding completes
-        return this.queue.push(resolve);
+        // queue the promise handlers to resolve or reject later
+        this.queue.push({ resolve, reject });
+        return;
       }
 
       self.isBinding = true;
       return this.client.bind(dn, password, (err, res) => {
-        if (err) return reject(err);
+        if (err) {
+          self.isBinding = false;
+          self.isBoundTo = null;
+          // reject any queued promises
+          self.queue.forEach(({ reject: r }) => r(err));
+          self.queue = [];
+          return reject(err);
+        }
 
         self.isBinding = false;
         self.isBoundTo = dn;
 
         // resolve everything on this.queue
-        self.queue.forEach((fn) => fn());
+        self.queue.forEach(({ resolve: fn }) => fn());
         self.queue = [];
         return resolve(res);
       });
