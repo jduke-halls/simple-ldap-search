@@ -110,7 +110,7 @@ export default class SimpleLDAPSearch {
   }
 
   /**
-   * Secures the LDAP opject by using the STARTTLS verb
+   * Secures the LDAP object by using the STARTTLS verb
    * @param {Object} opts - STARTTLS options
    * @returns {Promise|Error} - Resolves the promise or returns the error from ldapjs
    */
